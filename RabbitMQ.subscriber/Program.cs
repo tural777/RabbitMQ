@@ -24,6 +24,8 @@ namespace RabbitMQ.subscriber
 
             channel.BasicConsume("hello-queue", true, consumer);
 
+
+            Console.WriteLine("listening...");
             consumer.Received += (object sender, BasicDeliverEventArgs e) =>
             {
                 var message = Encoding.UTF8.GetString(e.Body.ToArray());
