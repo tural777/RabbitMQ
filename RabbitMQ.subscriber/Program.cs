@@ -1,6 +1,7 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
+using System.IO;
 using System.Text;
 using System.Threading;
 
@@ -18,28 +19,29 @@ namespace RabbitMQ.subscriber
 
             var channel = connection.CreateModel();
 
-            // olsa da olar, olmasa da
-            //channel.QueueDeclare("hello-queue", true, false, false);
-
 
             // her subscriber-e 1-1 mesaj
             channel.BasicQos(0, 1, false);
 
             var consumer = new EventingBasicConsumer(channel);
 
+            var queueName = channel.QueueDeclare().QueueName;
+            var routeKey = "Info.#";
 
-            // true olanda mesaj sehv ishlense de silinir.
-            // false edende ozmuz silinmeyi barede xeber vermeliyik.
-            channel.BasicConsume("hello-queue", false, consumer);
+            channel.QueueBind(queueName, "logs-topic", routeKey);
 
+            channel.BasicConsume(queueName, false, consumer);
 
             Console.WriteLine("listening...");
+
             consumer.Received += (object sender, BasicDeliverEventArgs e) =>
             {
                 var message = Encoding.UTF8.GetString(e.Body.ToArray());
 
                 Thread.Sleep(500);
                 Console.WriteLine("Gelen Mesaj: " + message);
+
+                File.AppendAllText("log-info.txt", message + '\n');
 
                 // burda mesajin ishlendiyi haqqda xeber veririk.
                 channel.BasicAck(e.DeliveryTag, false);

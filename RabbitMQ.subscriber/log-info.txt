@@ -1,0 +1,10 @@
+log-type: Info-Info-Warning
+log-type: Info-Critical-Info
+log-type: Info-Info-Warning
+log-type: Info-Critical-Critical
+log-type: Info-Warning-Critical
+log-type: Info-Info-Warning
+log-type: Info-Error-Critical
+log-type: Info-Warning-Info
+log-type: Info-Info-Warning
+log-type: Info-Info-Warning
