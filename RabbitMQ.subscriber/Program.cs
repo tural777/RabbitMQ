@@ -1,9 +1,11 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 
 namespace RabbitMQ.subscriber
@@ -43,8 +45,10 @@ namespace RabbitMQ.subscriber
             {
                 var message = Encoding.UTF8.GetString(e.Body.ToArray());
 
+                Product product = JsonSerializer.Deserialize<Product>(message);
+                
                 Thread.Sleep(500);
-                Console.WriteLine("Gelen Mesaj: " + message);
+                Console.WriteLine($"Gelen Mesaj: {product.Id}-{product.Name}-{product.Price}-{product.Stock}");
 
                 channel.BasicAck(e.DeliveryTag, false);
             };
