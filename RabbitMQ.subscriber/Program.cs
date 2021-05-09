@@ -1,6 +1,7 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -18,17 +19,21 @@ namespace RabbitMQ.subscriber
             using var connection = factory.CreateConnection();
 
             var channel = connection.CreateModel();
+            channel.ExchangeDeclare("header-exchange", durable: true, type: ExchangeType.Headers);
 
-
-            // her subscriber-e 1-1 mesaj
             channel.BasicQos(0, 1, false);
-
             var consumer = new EventingBasicConsumer(channel);
 
             var queueName = channel.QueueDeclare().QueueName;
-            var routeKey = "Info.#";
 
-            channel.QueueBind(queueName, "logs-topic", routeKey);
+            Dictionary<string, object> headers = new Dictionary<string, object>();
+            headers.Add("format", "pdf");
+            headers.Add("shape", "a4");
+            //headers.Add("x-match", "all");
+            headers.Add("x-match", "any");
+
+
+            channel.QueueBind(queueName, "header-exchange", String.Empty, headers);
 
             channel.BasicConsume(queueName, false, consumer);
 
@@ -41,12 +46,8 @@ namespace RabbitMQ.subscriber
                 Thread.Sleep(500);
                 Console.WriteLine("Gelen Mesaj: " + message);
 
-                File.AppendAllText("log-info.txt", message + '\n');
-
-                // burda mesajin ishlendiyi haqqda xeber veririk.
                 channel.BasicAck(e.DeliveryTag, false);
             };
-
 
 
             Console.ReadLine();
