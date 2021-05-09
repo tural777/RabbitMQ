@@ -1,5 +1,6 @@
 ﻿using RabbitMQ.Client;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace RabbitMQ.publisher
@@ -18,15 +19,20 @@ namespace RabbitMQ.publisher
 
             channel.QueueDeclare("hello-queue", true, false, false);
 
-            string message = "hello world";
+            Enumerable.Range(1, 50).ToList().ForEach(x =>
+            {
+                string message = $"Message {x}";
 
-            var messageBody = Encoding.UTF8.GetBytes(message);
+                var messageBody = Encoding.UTF8.GetBytes(message);
 
-            // send a message to queue
-            // default exchange (the exchange name is the same as the queue name)
-            channel.BasicPublish(string.Empty, "hello-queue", null, messageBody);
+                // send a message to queue
+                // default exchange (the exchange name is the same as the queue name)
+                channel.BasicPublish(string.Empty, "hello-queue", null, messageBody);
 
-            Console.WriteLine("Mesaj gonderilmishdir.");
+                Console.WriteLine($"Mesaj gonderilmishdir : {message}");
+            });
+
+
 
             Console.ReadLine();
         }

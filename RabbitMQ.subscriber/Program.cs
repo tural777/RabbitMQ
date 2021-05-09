@@ -2,6 +2,7 @@
 using RabbitMQ.Client.Events;
 using System;
 using System.Text;
+using System.Threading;
 
 namespace RabbitMQ.subscriber
 {
@@ -20,9 +21,16 @@ namespace RabbitMQ.subscriber
             // olsa da olar, olmasa da
             //channel.QueueDeclare("hello-queue", true, false, false);
 
+
+            // her subscriber-e 1-1 mesaj
+            channel.BasicQos(0, 1, false);
+
             var consumer = new EventingBasicConsumer(channel);
 
-            channel.BasicConsume("hello-queue", true, consumer);
+
+            // true olanda mesaj sehv ishlense de silinir.
+            // false edende ozmuz silinmeyi barede xeber vermeliyik.
+            channel.BasicConsume("hello-queue", false, consumer);
 
 
             Console.WriteLine("listening...");
@@ -30,13 +38,17 @@ namespace RabbitMQ.subscriber
             {
                 var message = Encoding.UTF8.GetString(e.Body.ToArray());
 
+                Thread.Sleep(500);
                 Console.WriteLine("Gelen Mesaj: " + message);
+
+                // burda mesajin ishlendiyi haqqda xeber veririk.
+                channel.BasicAck(e.DeliveryTag, false);
             };
 
 
 
             Console.ReadLine();
         }
-      
+
     }
 }
