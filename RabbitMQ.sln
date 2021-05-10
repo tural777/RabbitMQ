@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.publisher", "Rabbi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{A74996C6-161A-467C-A071-1065597A9634}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.WaterMarkWeb", "RabbitMQ.WaterMarkWeb\RabbitMQ.WaterMarkWeb.csproj", "{AC5213CF-1D24-40A2-909C-478B8C8BE31C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A74996C6-161A-467C-A071-1065597A9634}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A74996C6-161A-467C-A071-1065597A9634}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A74996C6-161A-467C-A071-1065597A9634}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC5213CF-1D24-40A2-909C-478B8C8BE31C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC5213CF-1D24-40A2-909C-478B8C8BE31C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC5213CF-1D24-40A2-909C-478B8C8BE31C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC5213CF-1D24-40A2-909C-478B8C8BE31C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
