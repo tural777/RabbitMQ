@@ -1,17 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
+using RabbitMQ.WaterMarkWeb.BackgroundServices;
 using RabbitMQ.WaterMarkWeb.Models;
 using RabbitMQ.WaterMarkWeb.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RabbitMQ.WaterMarkWeb
 {
@@ -29,7 +26,8 @@ namespace RabbitMQ.WaterMarkWeb
         {
             services.AddSingleton(sp => new ConnectionFactory()
             {
-                Uri = new Uri(Configuration.GetConnectionString("RabbitMQ"))
+                Uri = new Uri(Configuration.GetConnectionString("RabbitMQ")),
+                DispatchConsumersAsync = true
             });
 
             services.AddSingleton<RabbitMQClientService>();
@@ -40,6 +38,8 @@ namespace RabbitMQ.WaterMarkWeb
             {
                 options.UseInMemoryDatabase(databaseName: "productDb");
             });
+
+            services.AddHostedService<ImageWatermarkProcessBackgroundService>();
 
             services.AddControllersWithViews();
         }
